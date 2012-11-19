@@ -1,6 +1,7 @@
 require "active_support/core_ext"
 
 module Frisky
+  autoload :Config,     'frisky/config'
   autoload :Classifier, 'frisky/classifier'
   autoload :Version,    'frisky/version'
 end

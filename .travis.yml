@@ -6,3 +6,6 @@ script: "bundle exec rake spec"
 branches:
   only:
     - development
+services:
+  - mongodb
+  - redis-server
