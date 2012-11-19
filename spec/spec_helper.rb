@@ -1,0 +1,2 @@
+require "frisky"
+require "rspec"
