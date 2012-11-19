@@ -1,7 +1,9 @@
 frisky
 ======
 
-A playful scm mirror platform
+A playful scm mirror platform for MSR (mining software repositories)
+
+[![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky)
 
 ## What this is
 
