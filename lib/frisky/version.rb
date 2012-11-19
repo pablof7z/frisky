@@ -1,1 +1,3 @@
-VERSION = "0.7.0"
+module Frisky
+  Version = '0.7.0'
+end
