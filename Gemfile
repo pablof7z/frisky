@@ -10,3 +10,7 @@ group :test do
 end
 
 gem 'activesupport'
+
+gem 'mongo'
+gem 'bson_ext'
+gem 'redis'
