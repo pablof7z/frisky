@@ -6,6 +6,7 @@ module Frisky
       class << self
         @@client_id     = nil
         @@client_secret = nil
+        @@per_page      = 100
 
         def client_id; @@client_id; end
         def client_id=(value); @@client_id = value; end
@@ -13,11 +14,19 @@ module Frisky
         def client_secret; @@client_secret; end
         def client_secret=(value); @@client_secret = value; end
 
+        def per_page; @@per_page; end
+        def per_page=(value); @@per_page = value; end
+
         def create_url(url)
           # Append client_id and client_secret when we have them
           unless (@@client_id.blank? and @@client_secret.blank?) or url.include?('client_id')
             url << ((not url.include?('?')) ? '?' : '&')
             url << "client_id=#{@@client_id}&client_secret=#{@@client_secret}"
+          end
+
+          unless url.include?('per_page')
+            url << ((not url.include?('?')) ? '?' : '&')
+            url << "per_page=#{@@per_page}"
           end
 
           url
