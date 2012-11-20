@@ -32,5 +32,18 @@ describe Frisky::Helpers::GitHub do
 
       Frisky::Helpers::GitHub.create_url('https://api.github.com/events?client_id=right').include?("client_id=right").should be_true
     end
+
+    it "includes a per_page parameter of 100" do
+      Frisky::Helpers::GitHub.create_url('https://api.github.com/events').include?("per_page=100").should be_true
+    end
+
+    context "with a custom per_page size" do
+      let(:per_page) { 200 }
+
+      it "includes a per_page parameter of 200" do
+        Frisky::Helpers::GitHub.per_page = per_page
+        Frisky::Helpers::GitHub.create_url('https://api.github.com/events').include?("per_page=#{per_page}").should be_true
+      end
+    end
   end
 end
