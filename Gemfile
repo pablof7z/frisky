@@ -10,8 +10,7 @@ group :test do
   gem 'ephemeral_response'
 end
 
-gem 'activesupport'
-
+gem 'mongo_mapper'
 gem 'mongo'
 gem 'bson_ext'
-gem 'redis'gem 'redis'
+gem 'redis'
