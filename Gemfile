@@ -14,4 +14,4 @@ gem 'activesupport'
 
 gem 'mongo'
 gem 'bson_ext'
-gem 'redis'
+gem 'redis'gem 'redis'
