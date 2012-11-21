@@ -1,5 +1,5 @@
-github:
-  keys:
-    - client_id:client_secret
+# github:
+#   keys:
+#     - client_id:client_secret
 mongo: mongodb://127.0.0.1/frisky
 redis: 127.0.0.1
