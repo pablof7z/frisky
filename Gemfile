@@ -7,6 +7,7 @@ end
 group :test do
   gem 'rake'
   gem 'rspec'
+  gem 'ephemeral_response'
 end
 
 gem 'activesupport'
