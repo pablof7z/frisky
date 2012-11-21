@@ -1,4 +1,10 @@
 module Frisky
+  class << self
+    attr_accessor :classifiers
+  end
+
+  @classifiers ||= {}
+
   module Classifier
     extend ActiveSupport::Concern
 
@@ -10,6 +16,8 @@ module Frisky
 
     included do
       extend Hooks
+      # Register
+      Frisky.classifiers[self.name] = self
     end
   end
 end

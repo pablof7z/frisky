@@ -1,0 +1,4 @@
+#!/bin/bash
+
+D=`dirname $0`/..
+irb -r $D/bin/console.rb -I$D:$D/lib

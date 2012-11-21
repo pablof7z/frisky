@@ -7,10 +7,10 @@ end
 group :test do
   gem 'rake'
   gem 'rspec'
+  gem 'ephemeral_response'
 end
 
-gem 'activesupport'
-
+gem 'mongo_mapper'
 gem 'mongo'
 gem 'bson_ext'
 gem 'redis'

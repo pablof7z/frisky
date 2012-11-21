@@ -75,3 +75,55 @@ gathering the score of the parent of that file and storing the delta associated 
 
 The method `cached_output` will call `output_reek` only when the score hasn't been generated
 previously.
+
+## Setup
+
+Frisky's architecture is composed of `schedulers` and classifiers.
+
+### Infrastructure requirements
+
+Frisky requires the following software stack to run
+
+  - mongodb >= 2.2
+  - redis >= 1.4
+  - ruby 1.9
+
+### Installing
+
+A simple `clone` will do:
+
+```
+git clone https://github.com/heelhook/frisky.git
+cd frisky
+bundle install
+```
+
+### Configuring
+
+The main configuration file is `frisky.yml`
+
+```
+github:
+  keys:
+    - client_id:client_secret
+mongo: mongodb://127.0.0.1/frisky
+redis: 127.0.0.1
+```
+
+The configuration is self-explanatory, the only thing that needs clarification is the `github.keys` key,
+the key is an array of `client_id:client_secret` duples, on startup frisky will pick a random key and use it
+throughout the session.
+
+### Running
+
+```
+bundle exec bin/frisky-event-scheduler -v
+```
+
+Fetches github public events and caches them for further processing. Can be run in parallel in multiple hosts.
+
+```
+bundle exec bin/frisky-classifiers -v
+```
+
+Loads classifiers models and processes events through them. Can be run in parallel in multiple hosts.

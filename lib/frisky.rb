@@ -1,7 +1,17 @@
 require "active_support/core_ext"
 
+require 'frisky/helpers/github'
+
+require 'frisky/config'
+
+require 'frisky/models/author'
+require 'frisky/models/commit'
+require 'frisky/models/event'
+require 'frisky/models/repository'
+
+require 'frisky/lock'
+
 module Frisky
-  autoload :Config,     'frisky/config'
   autoload :Classifier, 'frisky/classifier'
   autoload :Version,    'frisky/version'
 end
