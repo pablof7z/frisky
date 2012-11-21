@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Frisky by heelhook</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Frisky</h1>
+          <h2>A playful scm mirror platform for MSR (mining software repositories)</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/heelhook/frisky/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/heelhook/frisky/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/heelhook/frisky" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>frisky</h1>
+
+<p>A playful scm mirror platform for MSR (mining software repositories)</p>
+
+<p><a href="https://travis-ci.org/heelhook/frisky"><img src="https://secure.travis-ci.org/heelhook/frisky.png?branch=development" alt="Build Status"></a></p>
+
+<h2>What this is</h2>
+
+<p>Frisky is an engine to cache and process SCM repositories, supporting initially Git and particularly Github
+as a discovery source.</p>
+
+<h2>How it works</h2>
+
+<p>Frisky allows you to create classifiers that mine information from software repositories, handling the specifics of
+data gathering, caching and storage. Classifiers can interact with each others' data by consuming and setting objects' tags.</p>
+
+<p>Classifiers are Ruby classes that respond to mining events.</p>
+
+<pre><code>class CommitCountClassifier &lt;&lt; Classifier
+  commit :update_commit_count, if: lambda {|commit| commit.files_type('Ruby').any? }
+
+  def update_file_loc(commit)
+    @repository.increment(:commit_count, 1)
+  end
+end
+</code></pre>
+
+<p>The <code>commit</code> class method specifies a callback method that will be called whenever a new commit
+that contains at least one file of <code>Ruby</code> code.</p>
+
+<h3>A more useful classifier</h3>
+
+<p>The following classifier will run <code>reek</code> on ruby files on each commit, gathering
+the results on each commit object to get a clear picture of the evolution of code smells
+on each commit.</p>
+
+<p>We also want to persist this information to the committer responsible for the delta so
+we can find out how each user has performed over time.</p>
+
+<pre><code>class ReekClassifier &lt;&lt; Classifier
+  commit :run_reek_on_commit
+
+  def run_reek_on_commit(commit)
+    commit.file_types 'Ruby' do |file|
+      # Only get reek when we have something to compare against
+      next unless commit.parent
+
+      reek_v2 = file_reek_on commit.id, file
+      reek_v1 = file_reek_on commit.parent.id, file
+      reek_delta = reek_v2 - reek_v1
+
+      commit.increment(:reek, reek_delta)
+      commit.author.increment(:reek, reek_delta)
+    end
+  end
+
+  def file_reek_on(commit_id, file_path)
+    cached_output :reek, commit_id, file_path
+  end
+
+  # Get reek output for an IO
+  def output_reek(io)
+    # ...
+  end
+end
+
+</code></pre>
+
+<p>Here the method <code>file_reek_on</code> is called to gather the <code>reek</code> score of each file on each commit,
+gathering the score of the parent of that file and storing the delta associated to the commit and to the author.</p>
+
+<p>The method <code>cached_output</code> will call <code>output_reek</code> only when the score hasn't been generated
+previously.</p>
+
+<h2>Setup</h2>
+
+<p>Frisky's architecture is composed of <code>schedulers</code> and classifiers.</p>
+
+<h3>Infrastructure requirements</h3>
+
+<p>Frisky requires the following software stack to run</p>
+
+<ul>
+<li>mongodb &gt;= 2.2</li>
+<li>redis &gt;= 1.4</li>
+<li>ruby 1.9</li>
+</ul><h3>Installing</h3>
+
+<p>A simple <code>clone</code> will do:</p>
+
+<pre><code>git clone https://github.com/heelhook/frisky.git
+cd frisky
+bundle install
+</code></pre>
+
+<h3>Configuring</h3>
+
+<p>The main configuration file is <code>frisky.yml</code></p>
+
+<pre><code>github:
+  keys:
+    - client_id:client_secret
+mongo: mongodb://127.0.0.1/frisky
+redis: 127.0.0.1
+</code></pre>
+
+<p>The configuration is self-explanatory, the only thing that needs clarification is the <code>github.keys</code> key,
+the key is an array of <code>client_id:client_secret</code> duples, on startup frisky will pick a random key and use it
+throughout the session.</p>
+
+<h3>Running</h3>
+
+<pre><code>bundle exec bin/frisky-event-scheduler -v
+</code></pre>
+
+<p>Fetches github public events and caches them for further processing. Can be run in parallel in multiple hosts.</p>
+
+<pre><code>bundle exec bin/frisky-classifiers -v
+</code></pre>
+
+<p>Loads classifiers models and processes events through them. Can be run in parallel in multiple hosts.</p>
+        </section>
+
+        <footer>
+          Frisky is maintained by <a href="https://github.com/heelhook">heelhook</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
