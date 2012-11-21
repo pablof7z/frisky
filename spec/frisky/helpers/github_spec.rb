@@ -13,10 +13,6 @@ describe Frisky::Helpers::GitHub do
   end
 
   context ".create_url" do
-    it "creates a url without client_id when there are no settings" do
-      Frisky::Helpers::GitHub.create_url('https://api.github.com/events').include?("client_id").should be_false
-    end
-
     it "creates a url using client_id when it has settings" do
       unless ENV['GITHUB_CLIENT_ID'].blank? or ENV['GITHUB_CLIENT_SECRET'].blank?
         Frisky::Helpers::GitHub.client_id     = ENV['GITHUB_CLIENT_ID']

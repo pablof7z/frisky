@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'json'
 
 module Frisky
   module Helpers
@@ -17,11 +18,18 @@ module Frisky
         def per_page; @@per_page; end
         def per_page=(value); @@per_page = value; end
 
-        def create_url(url)
+        def fetch_events; fetch_url("https://api.github.com/events"); end
+
+        def create_url(url, opts={})
           # Append client_id and client_secret when we have them
-          unless (@@client_id.blank? and @@client_secret.blank?) or url.include?('client_id')
+          unless (@@client_id != nil and @@client_secret != nil) or url.include?('client_id')
             url << ((not url.include?('?')) ? '?' : '&')
             url << "client_id=#{@@client_id}&client_secret=#{@@client_secret}"
+          end
+
+          opts.each do |key, value|
+            url << ((not url.include?('?')) ? '?' : '&')
+            url << "#{key}=#{value}"
           end
 
           unless url.include?('per_page')
@@ -32,10 +40,12 @@ module Frisky
           url
         end
 
-        def fetch_url(url)
+        def fetch_url(url, opts={})
           attempts ||= 0
 
-          url = create_url(url)
+          url = create_url(url.dup, opts)
+
+          Frisky.log.debug url
 
           JSON.parse(open(url).read)
         rescue OpenURI::HTTPError => e
