@@ -13,7 +13,7 @@ module Frisky
           @hooks ||= Hash.new { |hash, key| hash[key] = [] }
         end
 
-        def hook(trigger, *args)
+        def hook(trigger, args)
           @hooks ||= Hash.new { |hash, key| hash[key] = [] }
           @hooks[trigger] << args
         end
