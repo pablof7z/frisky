@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+
+Bundler.require(:default)
+
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'optparse'
+require 'frisky/commands/classifiers'
+require 'yaml'
+require 'logger'
+
+Frisky::Commands::Classifiers.run("frisky-classifiers")
