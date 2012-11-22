@@ -6,6 +6,7 @@ A playful scm mirror platform for MSR (mining software repositories)
 http://heelhook.github.com/frisky
 
 [![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/heelhook/frisky)
 
 ## What this is
 
