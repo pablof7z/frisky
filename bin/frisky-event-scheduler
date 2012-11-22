@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+
+Bundler.require(:default)
+
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+require 'optparse'
+require 'frisky/commands/event_scheduler'
+require 'yaml'
+require 'logger'
+
+options = {
+  url: "https://api.github.com/events",
+  :loop => 20
+}
+
+Frisky::Commands::EventScheduler.run("frisky-event-scheduler", options) do |opts|
+  opts.on('-u', '--url URL', "Run with url (default: #{options[:url]})") { |v| options[:url] = v}
+  opts.on('--[no-]loop [DELAY]', "Run periodically in a loop every DELAY seconds (default: 20)") { |v| options[:loop] = v}
+end

@@ -1,0 +1,11 @@
+language: ruby
+bundler_args: --without development
+rvm:
+  - 1.9.3
+script: "bundle exec rake spec"
+branches:
+  only:
+    - development
+services:
+  - mongodb
+  - redis-server
