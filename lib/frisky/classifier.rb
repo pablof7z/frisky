@@ -1,6 +1,14 @@
 module Frisky
   class << self
     attr_accessor :classifiers
+
+    def reset_classifiers!
+      # Undefine classes
+      @classifiers.keys.each {|klass| Object.send(:remove_const, klass.to_sym)}
+
+      # Remove all keys
+      @classifiers.clear
+    end
   end
 
   @classifiers ||= {}

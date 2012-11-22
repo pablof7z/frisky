@@ -13,6 +13,7 @@ module Frisky
       Frisky.log.level = case
         when @options[:debug]; ::Logger::DEBUG
         when @options[:verbose]; ::Logger::INFO
+        when @options[:mute]; ::Logger::FATAL
         else; ::Logger::WARN
         end
 

@@ -50,13 +50,6 @@ module Frisky
       end
 
       def run
-        # Load classifiers
-        Dir.glob("classifiers/*.rb") do |file|
-          load file
-        end
-
-        Frisky.log.info "Loaded #{Frisky.classifiers.count} classifiers: #{Frisky.classifiers.keys.join(', ')}"
-
         # Redis connections can be simultaneously used for other non pubsub operations
         # while subscribed.
         # Duplicate redis connection for pubsub use.
@@ -80,6 +73,24 @@ module Frisky
             end
           end
         end
+      end
+
+      def initialize(config={})
+        Frisky.classifiers.clear
+        super(config)
+
+        # Load classifiers
+        (config[:load_classifiers]||Dir.glob("classifiers/*.rb")).each do |file|
+          begin
+            load file
+          rescue LoadError => e
+            Frisky.log.error "#{file}: #{e.message}"
+
+            exit(1)
+          end
+        end
+
+        Frisky.log.info "Loaded #{Frisky.classifiers.count} classifiers: #{Frisky.classifiers.keys.join(', ')}"
       end
     end
   end
