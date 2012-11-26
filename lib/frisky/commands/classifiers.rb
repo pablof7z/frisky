@@ -1,4 +1,5 @@
 require 'frisky/command'
+require 'frisky/classifier'
 require 'frisky'
 require 'socket'
 
