@@ -18,7 +18,7 @@ data gathering, caching and storage. Classifiers can interact with each others' 
 Classifiers are Ruby classes that respond to mining events.
 
 ```
-class CommitCountClassifier << Classifier
+class CommitCountClassifier < Classifier
   commit :update_commit_count, if: lambda {|commit| commit.files_type('Ruby').any? }
 
   def update_file_loc(commit)
@@ -41,7 +41,7 @@ we can find out how each user has performed over time.
 
 
 ```
-class ReekClassifier << Classifier
+class ReekClassifier < Classifier
   commit :run_reek_on_commit
 
   def run_reek_on_commit(commit)
