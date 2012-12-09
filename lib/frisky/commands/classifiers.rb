@@ -15,7 +15,7 @@ module Frisky
 
       def handle_push(event)
         Frisky.classifiers.each do |name, classifier|
-          next unless Frisky::Lock.lock? "#{event.id}:#{name}"
+          next unless Frisky::Helpers::Lock.lock? "#{event.id}:#{name}"
 
           @@threads << Thread.new do
             begin
@@ -31,7 +31,7 @@ module Frisky
 
             rescue StandardError => e
             ensure
-              Frisky::Lock.unlock "#{event.id}:#{name}"
+              Frisky::Helpers::Lock.unlock "#{event.id}:#{name}"
             end
           end
 
