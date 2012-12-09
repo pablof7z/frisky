@@ -9,7 +9,7 @@ require 'frisky/models/commit'
 require 'frisky/models/event'
 require 'frisky/models/repository'
 
-require 'frisky/lock'
+require 'frisky/helpers/lock'
 
 module Frisky
   autoload :Classifier, 'frisky/classifier'
