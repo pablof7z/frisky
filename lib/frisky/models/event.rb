@@ -1,3 +1,5 @@
+require 'json'
+
 module Frisky
   module Model
     class Event
@@ -7,7 +9,7 @@ module Frisky
 
       many :commits, class_name: 'Frisky::Model::Commit'
 
-      def push?; @type == 'PushEvent'; end
+      def serialize; self.to_json; end
 
       def initialize(*args)
         super

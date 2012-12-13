@@ -12,6 +12,8 @@ require 'frisky/commands/classifiers'
 require 'yaml'
 require 'logger'
 
-Frisky::Commands::Classifiers.run("frisky-classifiers") do |opts|
+options = {}
+
+Frisky::Commands::Classifiers.run("frisky-classifiers", options) do |opts|
   opts.on('-l', '--load FILE', "Skip classifier directory, only classifier in specified file (can be used multiple times)") { |v| (options[:load_classifiers] ||= []) << v}
 end

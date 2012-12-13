@@ -10,6 +10,7 @@ require 'frisky/models/event'
 require 'frisky/models/repository'
 
 require 'frisky/helpers/lock'
+require 'frisky/errors'
 
 module Frisky
   autoload :Classifier, 'frisky/classifier'

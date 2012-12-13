@@ -6,6 +6,7 @@ module Frisky
       module ClassMethods
         def inherited(descendant)
           descendant.instance_variable_set(:@hooks, hooks.dup)
+          descendant.instance_variable_set(:@events, events.dup)
           super
         end
 
@@ -13,13 +14,27 @@ module Frisky
           @hooks ||= Hash.new { |hash, key| hash[key] = [] }
         end
 
-        def hook(trigger, args)
+        def hook(event, trigger, args)
           @hooks ||= Hash.new { |hash, key| hash[key] = [] }
           @hooks[trigger] << args
+          (@events ||= Array.new) << "#{event}_event".camelize
         end
 
-        def commit(*args); hook(:commit, args); end
-        def finalize(*args); hook(:commit, args); end
+        def events
+          @events ||= Array.new
+        end
+
+        def on_push(*args)
+          hook(:push, :push, args)
+        end
+
+        def on_commit(*args)
+          hook(:push, :commit, args)
+        end
+
+        def on_follow(*args)
+          hook(:follow, :follow, args)
+        end
       end
     end
   end

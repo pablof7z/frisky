@@ -5,7 +5,7 @@ module Frisky
 
     attr_reader :options
 
-    def initialize(options)
+    def initialize(options={})
       @options = options
 
       Frisky.config_file @options[:config] if @options[:config]
@@ -19,7 +19,7 @@ module Frisky
 
       # Require the debugger if its going to be used
       if options[:debug]
-        Bundler.require(:development)
+        Bundler.require(:development, :default)
       else
         def debugger; end
       end

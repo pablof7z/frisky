@@ -22,7 +22,7 @@ module Frisky
 
         def create_url(url, opts={})
           # Append client_id and client_secret when we have them
-          unless (@@client_id != nil and @@client_secret != nil) or url.include?('client_id')
+          if (@@client_id != nil and @@client_secret != nil) and not url.include?('client_id')
             url << ((not url.include?('?')) ? '?' : '&')
             url << "client_id=#{@@client_id}&client_secret=#{@@client_secret}"
           end
