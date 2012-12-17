@@ -14,7 +14,7 @@ group :test do
   gem 'mongo_mapper'
   gem 'mongo'
   gem 'bson_ext'
-  gem 'frisky_mongo', ">= 0.7.1"
+  gem 'frisky_mongo', "~> 0.7.1"
   gem 'factory_girl'
 end
 
@@ -22,7 +22,7 @@ group :mongo do
   gem 'mongo_mapper'
   gem 'mongo'
   gem 'bson_ext'
-  gem 'frisky_mongo', ">= 0.7.1"
+  gem 'frisky_mongo', "~> 0.7.1"
 end
 
 gem 'redis'
