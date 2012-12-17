@@ -17,9 +17,11 @@ module Frisky
         else; ::Logger::WARN
         end
 
+      Bundler.require(:default, :mongo)
+
       # Require the debugger if its going to be used
       if options[:debug]
-        Bundler.require(:development, :default)
+        Bundler.require(:development, :default, :mongo)
       else
         def debugger; end
       end

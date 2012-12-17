@@ -1,4 +1,3 @@
-require 'frisky/helpers/github'
 require 'frisky/command'
 require 'frisky'
 
@@ -20,16 +19,21 @@ module Frisky
 
         # Get 10 pages of of events
         pages_to_fetch.times do |page_number|
-          Frisky::Helpers::GitHub.fetch_url(@options[:url], per_page: 30, page: page_number+1).each do |event|
-            next if Frisky::Model::Event.exists?(event)
-            e = Frisky::Model::Event.create(event)
+          Octokit.get(@options[:url], per_page: 30, page: page_number+1).each do |event_raw|
+            next if Frisky::Model::Event.exists?(event_raw)
+            e = Frisky::Model::Event.load_from_raw(event_raw)
 
             @classifiers.each do |name, event_types|
-              # Does this classifier support this event?
-              next unless event_types.include? e.type
+              begin
+                # Does this classifier support this event?
+                next unless event_types.include? e.type
 
-              Resque.push(name, 'class' => name, args: e.serialize)
-              pushed_jobs += 1
+                Resque.push(name, 'class' => name, args: e.serialize.to_s)
+                pushed_jobs += 1
+              rescue StandardError => e
+                Frisky.log.warn "[#{e.class}] #{e.message}"
+                e.backtrace[0..9].each {|a| Frisky.log.info a}
+              end
             end
           end
         end
@@ -69,14 +73,9 @@ module Frisky
       end
 
       def run
-        # Check the currently loaded classifiers
-        @subpub_thread = Thread.new do
-          loop { fetch_loaded_classifiers; sleep 10 }
-        end
-
-        sleep 1 # Avoid/delay race condition
-
         loop do
+          fetch_loaded_classifiers
+
           # Don't perform if we have no classifiers loaded that will do something with the data
           if @classifiers.any?
             perform
@@ -87,8 +86,6 @@ module Frisky
           break unless options[:loop]
           sleep @options[:loop].to_i
         end
-
-        @subpub_thread.kill
       end
     end
   end

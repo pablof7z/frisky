@@ -7,7 +7,7 @@ describe Frisky::Commands::EventScheduler do
     reset_databases
   end
 
-  let (:command) { Frisky::Commands::EventScheduler.new(url: "https://api.github.com/events", mute: true) }
+  let (:command) { Frisky::Commands::EventScheduler.new(url: "events", mute: true) }
   let (:classifier) { ValidClassifier }
 
   describe '#fetch_loaded_classifiers' do
@@ -24,7 +24,6 @@ describe Frisky::Commands::EventScheduler do
       command.fetch_loaded_classifiers
       command.classifiers.length == 1
     end
-
   end
 
   describe '#perform' do

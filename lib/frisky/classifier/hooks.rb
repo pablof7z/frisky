@@ -28,10 +28,6 @@ module Frisky
           hook(:push, :push, args)
         end
 
-        def on_commit(*args)
-          hook(:push, :commit, args)
-        end
-
         def on_follow(*args)
           hook(:follow, :follow, args)
         end

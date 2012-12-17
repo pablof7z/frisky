@@ -1,8 +1,8 @@
 class ValidClassifier
   include Frisky::Classifier
 
-  on_commit :commit_handler
+  on_push :push_handler
 
-  def commit_handler
-  end
+  # def push_handler
+  # end
 end

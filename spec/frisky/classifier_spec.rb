@@ -6,7 +6,7 @@ describe Frisky::Classifier do
 
   describe ".included" do
     it "includes the commit callback" do
-      klass.should respond_to :on_commit
+      klass.should respond_to :on_push
     end
 
     it "has the appropriate number of callbacks registered" do
@@ -23,19 +23,20 @@ describe Frisky::Classifier do
   it { klass.should respond_to :events }
   it { klass.should respond_to :hooks }
 
-  describe '.on_commit' do
+  describe '.on_push' do
     it "correctly sets the push event" do
       klass.events.should include('PushEvent')
     end
 
-    it "adds a handler for the commit hook" do
-      klass.hooks.keys.should include(:commit)
+    it "adds a handler for the push hook" do
+      klass.hooks.keys.should include(:push)
     end
   end
 
   describe "::Queue" do
-    let (:valid_event) { {id: '1234', type: 'PushEvent'}.to_json }
-    let (:invalid_event) { {id: '1234', type: 'InexistentEvent'}.to_json }
+    let (:valid_event) do
+      Frisky::Model::Event.load_from_raw(Octokit.public_events.select {|e| e.type == event_type}.first).serialize
+    end
 
     describe ".announce" do
       it "announces the events supported by the classifier" do
@@ -49,17 +50,14 @@ describe Frisky::Classifier do
       end
     end
 
-    describe '.perform' do
-      it "errors on unhandled event" do
-        expect { klass.perform(invalid_event) }.to raise_error Frisky::NotImplemented
-      end
+    context "with a push event" do
+      let (:event_type) { "PushEvent" }
 
-      it "handles valid event properly" do
-        lambda { klass.perform(valid_event) }.should_not raise_error
-      end
-
-      it "raises no error on invalid json" do
-        lambda { klass.perform('invalid json') }.should_not raise_error
+      describe '.perform' do
+        it "handles valid event properly" do
+          klass.should_receive(:push_handler).with(kind_of(Frisky::Model::Repository), kind_of(Frisky::Model::Event))
+          lambda { klass.perform(valid_event) }.should_not raise_error
+        end
       end
     end
   end

@@ -17,8 +17,7 @@ module Frisky
         end
 
         def perform(payload)
-          # Load the payload into an event
-          event = Frisky::Model::Event.load(JSON.parse(payload))
+          event = Frisky::Model::Event.load_from_hashie(Hashie::Mash.new(JSON.parse(payload)))
 
           # Attempt to multiplex this event
           method = "process_#{event.type.underscore}"
@@ -30,15 +29,12 @@ module Frisky
         end
 
         def process_push_event(event)
-          # Create a lazy loader for this push
-          # push = Frisky::Model::Push.new_from_event(event)
-
           self.hooks[:push].each do |args|
             method = args.shift
 
-            Frisky.log.debug "Will call #{method} (#{self.name})"
+            # Frisky.log.debug "Will call #{method} (#{self.name}), have #{event.repository}"
 
-            # self.send(method, repo, push)
+            self.send(method, event.repository, event)
           end
         end
 

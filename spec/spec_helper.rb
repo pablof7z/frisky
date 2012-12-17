@@ -1,8 +1,8 @@
-require "mongo_mapper"
-require "frisky"
 require "bundler"
 
 Bundler.require(:test, :default)
+
+require "frisky"
 
 Frisky.config_file "#{File.dirname(__FILE__)}/../frisky.yml"
 Frisky.log.level = Logger::FATAL

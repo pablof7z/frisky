@@ -39,10 +39,12 @@ module Frisky
 
         # Validate that the expected class was loaded
         class_name = File.basename(file, '.*').camelize
-        klass = Kernel.const_get(class_name.to_sym)
+        klass      = Kernel.const_get(class_name.to_sym)
 
         # Load it
         self.classifiers[klass.name] = klass
+      rescue NoMethodError
+        raise
       rescue NameError
         raise Frisky::InvalidClassName, "Expected #{file} to define #{class_name}"
       end
