@@ -35,7 +35,7 @@ describe Frisky::Commands::EventScheduler do
     end
 
     it "creates events" do
-      Frisky::Model::Event.count.should >= 20
+      Frisky::Model::Event.count.should >= 10
     end
 
     it "does queue some jobs" do
