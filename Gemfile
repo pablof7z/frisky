@@ -27,7 +27,7 @@ end
 
 gem 'redis'
 gem 'activesupport'
-gem 'classproxy', ">= 0.7.9"
+gem 'classproxy', ">=0.7.10"
 
 gem 'resque'
 

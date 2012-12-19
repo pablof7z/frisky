@@ -1,6 +1,6 @@
 require 'bundler'
 
-Bundler.require(:default, :development)
+Bundler.require(:default, :development, :mongo)
 
 require 'mongo_mapper'
 require 'frisky'
