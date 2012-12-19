@@ -24,6 +24,8 @@ module Frisky
           raise NotImplemented, "Unsupported event #{event.type}" unless self.respond_to?(method)
 
           self.send(method, event)
+        rescue NoMethodError => e
+          Frisky.log.warn "Classifier #{self}: #{e.message}"
         rescue JSON::ParserError => e
           Frisky.log.warn "Parser error in payload: #{e.message}"
         end
