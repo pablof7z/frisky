@@ -16,6 +16,7 @@ module Frisky
 
       after_fallback_fetch do |obj|
         self.author = Person.soft_fetch(obj.author)
+        self.committer = Person.soft_fetch(obj.committer)
         self.message = obj.commit.message if obj.commit and obj.commit.message
         self.date = DateTime.parse obj.commit.author.date rescue nil
         self.stats = obj.stats
@@ -32,7 +33,7 @@ module Frisky
         # end
       end
 
-      proxy_methods :author, :message, :date, :stats, :parents
+      proxy_methods :author, :committer, :message, :date, :stats, :parents
 
       def self.load_from_raw(raw)
         model = super(raw)
