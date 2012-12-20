@@ -5,6 +5,7 @@ require 'frisky/config'
 require 'frisky/models/proxy_base'
 require 'frisky/models/person'
 require 'frisky/models/commit'
+require 'frisky/models/file_commit'
 require 'frisky/models/event'
 require 'frisky/models/repository'
 

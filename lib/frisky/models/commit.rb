@@ -26,14 +26,16 @@ module Frisky
           parent.repository = self.repository
           self.parents << Commit.soft_fetch(parent)
         end
-        # obj.files.each do |file|
-        #   file.repository = self.repository
-        #   file.commit     = self.commit
-        #   self.files << FileCommit.soft_fetch(file)
-        # end
+
+        self.files        ||= []
+        obj.files.each do |file|
+          file.repository = self.repository
+          file.commit     = self
+          self.files     << FileCommit.soft_fetch(file)
+        end
       end
 
-      proxy_methods :author, :committer, :message, :date, :stats, :parents
+      proxy_methods :author, :committer, :message, :date, :stats, :parents, :files
 
       def self.load_from_raw(raw)
         model = super(raw)

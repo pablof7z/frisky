@@ -102,5 +102,18 @@ describe Frisky::Model::Commit do
         commit.repository.should_not be_nil
       end
     end
+
+    context "loading a specific real commit" do
+      let (:repository) { Frisky::Model::Repository.new(full_name: 'heelhook/frisky') }
+      let (:commit) { Frisky::Model::Commit.soft_fetch(repository: repository, sha: '9621e8f6f31d733f68834a814d2ce2a74c19edc8') }
+
+      it "has files" do
+        commit.files.size.should > 0
+      end
+
+      it "has parents" do
+        commit.parents.size.should > 0
+      end
+    end
   end
 end
