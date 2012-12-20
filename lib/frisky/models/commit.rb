@@ -16,7 +16,9 @@ module Frisky
 
       after_fallback_fetch do |obj|
         self.author         = Person.soft_fetch(obj.author || obj.commit.author)
+        self.author.email ||= obj.commit.author.email
         self.committer      = Person.soft_fetch(obj.committer || obj.commit.committer)
+        self.committer.email ||= obj.commit.committer.email
         self.message        = obj.commit.message if obj.commit and obj.commit.message
         self.date           = DateTime.parse obj.commit.author.date rescue nil
         self.stats          = obj.stats
