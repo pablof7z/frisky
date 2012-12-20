@@ -15,13 +15,13 @@ module Frisky
       end
 
       after_fallback_fetch do |obj|
-        self.author = Person.soft_fetch(obj.author)
-        self.committer = Person.soft_fetch(obj.committer)
-        self.message = obj.commit.message if obj.commit and obj.commit.message
-        self.date = DateTime.parse obj.commit.author.date rescue nil
-        self.stats = obj.stats
+        self.author         = Person.soft_fetch(obj.author)
+        self.committer      = Person.soft_fetch(obj.committer)
+        self.message        = obj.commit.message if obj.commit and obj.commit.message
+        self.date           = DateTime.parse obj.commit.author.date rescue nil
+        self.stats          = obj.stats
 
-        self.parents = []
+        self.parents      ||= []
         obj.parents.each do |parent|
           parent.repository = self.repository
           self.parents << Commit.soft_fetch(parent)
@@ -41,7 +41,10 @@ module Frisky
         # id/sha, commit.message, repository
         model.sha = raw.sha if raw.respond_to? :sha
         model.sha ||= raw.id if raw.respond_to? :id
-        model.repository = Repository.soft_fetch(full_name: raw.repository.full_name) if raw.repository
+
+        model.repository   = raw.repository if raw.repository.is_a? Repository
+        model.repository ||= Repository.soft_fetch(full_name: raw.repository.full_name)
+
         model.message = raw.message if raw.respond_to? :message
         model.author = Person.soft_fetch(raw.author) if raw.author
         model.author ||= Person.soft_fetch(raw.commit.author) if raw.commit and raw.commit.author

@@ -87,5 +87,20 @@ describe Frisky::Model::Commit do
         commit.no_proxy_message.should_not be_nil
       end
     end
+
+    context "with raw including the repository object" do
+      # no full name so it would have failed if loading with soft_fetch
+      let (:repository) do
+        r = Frisky::Model::Repository.new
+        r.should_receive(:full_name).exactly(0).times
+        r
+      end
+      let (:extended_raw) { minimal_raw }
+      let (:commit) { klass.load_from_raw(extended_raw) }
+
+      it "has a repo without using soft_fetch" do
+        commit.repository.should_not be_nil
+      end
+    end
   end
 end
