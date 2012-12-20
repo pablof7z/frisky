@@ -115,5 +115,14 @@ describe Frisky::Model::Commit do
         commit.parents.size.should > 0
       end
     end
+
+    context "loading a specific real commit that has no login for author or committer" do
+      let (:repository) { Frisky::Model::Repository.new(full_name: 'pengwynn/octokit') }
+      let (:commit) { Frisky::Model::Commit.soft_fetch(repository: repository, sha: '83c3c5bc39f863b3568ae0c6cb408d90274e2ca5') }
+
+      it "loads the commit parent" do
+        commit.parents.count.should == 1
+      end
+    end
   end
 end

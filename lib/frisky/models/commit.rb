@@ -21,17 +21,17 @@ module Frisky
         self.date           = DateTime.parse obj.commit.author.date rescue nil
         self.stats          = obj.stats
 
-        self.parents      ||= []
+        self.parents        = []
         obj.parents.each do |parent|
           parent.repository = self.repository
-          self.parents << Commit.soft_fetch(parent)
+          self.parents     << Commit.soft_fetch(parent)
         end
 
-        self.files        ||= []
+        self.files          = []
         obj.files.each do |file|
-          file.repository = self.repository
-          file.commit     = self
-          self.files     << FileCommit.soft_fetch(file)
+          file.repository   = self.repository
+          file.commit       = self
+          self.files       << FileCommit.soft_fetch(file)
         end
       end
 
