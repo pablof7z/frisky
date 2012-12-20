@@ -15,8 +15,8 @@ module Frisky
       end
 
       after_fallback_fetch do |obj|
-        self.author         = Person.soft_fetch(obj.author)
-        self.committer      = Person.soft_fetch(obj.committer)
+        self.author         = Person.soft_fetch(obj.author || obj.commit.author)
+        self.committer      = Person.soft_fetch(obj.committer || obj.commit.committer)
         self.message        = obj.commit.message if obj.commit and obj.commit.message
         self.date           = DateTime.parse obj.commit.author.date rescue nil
         self.stats          = obj.stats
@@ -31,7 +31,8 @@ module Frisky
         obj.files.each do |file|
           file.repository   = self.repository
           file.commit       = self
-          self.files       << FileCommit.soft_fetch(file)
+          self.files       << FileCommit.soft_fetch(repository: self.repository,
+                                                    commit: self, path: file.filename)
         end
       end
 

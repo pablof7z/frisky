@@ -123,6 +123,14 @@ describe Frisky::Model::Commit do
       it "loads the commit parent" do
         commit.parents.count.should == 1
       end
+
+      it "gets the commit author data" do
+        commit.author.name.should == 'Andrew Brader'
+      end
+
+      it "gets the commit committer information" do
+        commit.committer.name.should == 'Andrew Brader'
+      end
     end
   end
 end
