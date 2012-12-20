@@ -6,22 +6,34 @@ Frisky::Classifier
 
 describe Frisky::Commands::Classifiers do
   before :each do
-    Frisky.reset_classifiers!
+    reset_databases
   end
 
-  context "attempts to load a classifier with a particular name" do
-    it "loads at least one classifier" do
-      Frisky::Commands::Classifiers.new
-      Frisky.classifiers.size.should >= 1
+  let (:command) { Frisky::Commands::Classifiers.new(load_classifiers: []) }
+  let (:invalid_classifier) { "spec/fixtures/classifiers/invalid_class_classifier.rb" }
+  let (:valid_classifier) { "spec/fixtures/classifiers/valid_classifier.rb" }
+  let (:classifier_klass) { ValidClassifier }
+
+  describe '#load_classifier' do
+    it "tries to use an existing file, but it doesn't have the right class name" do
+      expect { command.load_classifier(invalid_classifier) }.to raise_error(Frisky::InvalidClassName)
     end
 
-    it "loads no classifiers when it explicitly requests a non existent classifier name" do
-      lambda { Frisky::Commands::Classifiers.new(load_classifiers: ['NonexistentClassifier'], mute: true) }.should raise_error SystemExit
+    it "correctly loads a valid classifier" do
+      command.load_classifier(valid_classifier)
+      command.classifiers.size.should == 1
+    end
+  end
+
+  describe '#announce_classifiers' do
+    before :each do
+      command.load_classifier(valid_classifier)
+      command.announce_classifiers
     end
 
-    it "loads one classifier when it explicitly has an existent classifier name" do
-      Frisky::Commands::Classifiers.new
-      Frisky.classifiers.size.should == 1
+    it "announces the loaded classifiers" do
+      time = Time.now.utc.to_i
+      Frisky.redis.zrangebyscore("classifiers", time-60, time).length.should == 1
     end
   end
 end

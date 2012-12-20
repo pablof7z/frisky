@@ -20,3 +20,9 @@ doc/
 .DS_Store
 
 spec/fixtures/ephemeral_response
+
+Gemfile.lock
+
+frisky.sublime-project
+
+frisky.sublime-workspace

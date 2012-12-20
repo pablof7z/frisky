@@ -1,11 +1,9 @@
-frisky
-======
-
+# frisky [![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/heelhook/frisky)
 A playful scm mirror platform for MSR (mining software repositories)
 
 http://heelhook.github.com/frisky
 
-[![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky)
+
 
 ## What this is
 
@@ -19,8 +17,8 @@ data gathering, caching and storage. Classifiers can interact with each others' 
 
 Classifiers are Ruby classes that respond to mining events.
 
-```
-class CommitCountClassifier << Classifier
+```ruby
+class CommitCountClassifier < Classifier
   commit :update_commit_count, if: lambda {|commit| commit.files_type('Ruby').any? }
 
   def update_file_loc(commit)
@@ -42,8 +40,8 @@ We also want to persist this information to the committer responsible for the de
 we can find out how each user has performed over time.
 
 
-```
-class ReekClassifier << Classifier
+```ruby
+class ReekClassifier < Classifier
   commit :run_reek_on_commit
 
   def run_reek_on_commit(commit)

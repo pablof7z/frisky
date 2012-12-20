@@ -1,4 +1,5 @@
 language: ruby
+before_script: rm -rf spec/fixtures/ephemeral_response/*
 bundler_args: --without development
 rvm:
   - 1.9.3
