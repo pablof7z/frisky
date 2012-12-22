@@ -43,6 +43,9 @@ describe Frisky::Model::ProxyBase do
     let (:object_base) do
       t = Class.new(klass) do
         attr_accessor :full_name, :name
+
+        def new?; true; end
+        def save; true; end
       end
       t.fetch_autoload :name
       t

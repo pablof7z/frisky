@@ -30,6 +30,7 @@ module Frisky
 
           model = self.fetch(fetch_obj, {skip_fallback: true})
           model ||= self.load_from_raw(raw)
+          model.save if model.new?
           model
         end
 

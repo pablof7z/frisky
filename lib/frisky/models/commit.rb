@@ -10,15 +10,18 @@ module Frisky
       fallback_fetch do |args|
         repo_full_name = args[:repository].full_name if args[:repository].is_a? Repository
         repo_full_name ||= args[:repository]
-        Frisky.log.debug "[FALLBACK COMMIT] #{args[:id]} #{repo_full_name} #{args[:sha]}"
         Octokit.commit(repo_full_name, args[:sha])
       end
 
       after_fallback_fetch do |obj|
         self.author         = Person.soft_fetch(obj.author || obj.commit.author)
-        self.author.email ||= obj.commit.author.email
+        self.author.email ||= obj.commit.author.email || ""
+        self.author.save
+
         self.committer      = Person.soft_fetch(obj.committer || obj.commit.committer)
-        self.committer.email ||= obj.commit.committer.email
+        self.committer.email ||= obj.commit.committer.email || ""
+        self.committer.save if self.author.id != self.committer.id
+
         self.message        = obj.commit.message if obj.commit and obj.commit.message
         self.date           = DateTime.parse obj.commit.author.date rescue nil
         self.stats          = obj.stats
@@ -31,10 +34,10 @@ module Frisky
 
         self.files          = []
         obj.files.each do |file|
-          file.repository   = self.repository
-          file.commit       = self
-          self.files       << FileCommit.soft_fetch(repository: self.repository,
-                                                    commit: self, path: file.filename)
+          file.repository = self.repository
+          file.commit     = self
+          file.path       = file.filename
+          self.files       << FileCommit.soft_fetch(file)
         end
       end
 
@@ -51,9 +54,11 @@ module Frisky
         model.repository ||= Repository.soft_fetch(full_name: raw.repository.full_name)
 
         model.message = raw.message if raw.respond_to? :message
-        model.author = Person.soft_fetch(raw.author) if raw.author
+
+        # Load author/committer using no_proxy to avoid fallbacks
+        model.author = Person.soft_fetch(raw.author) if raw.no_proxy_author
+        model.committer = Person.soft_fetch(raw.committer) if raw.no_proxy_committer
         model.author ||= Person.soft_fetch(raw.commit.author) if raw.commit and raw.commit.author
-        model.committer = Person.soft_fetch(raw.committer) if raw.committer
         model.committer ||= Person.soft_fetch(raw.commit.committer) if raw.commit and raw.commit.committer
         model
       end

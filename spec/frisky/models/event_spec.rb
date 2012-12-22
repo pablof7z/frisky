@@ -22,7 +22,10 @@ describe Frisky::Model::Event do
   end
 
   context "on a push event" do
-    let (:event) { Frisky::Model::Event.load_from_raw(raw_events.select{|event| event.type == 'PushEvent' }.first) }
+    let (:event) do
+      e = raw_events.select{|event| event.type == 'PushEvent' and event.payload.commits.any? }.first
+      Frisky::Model::Event.load_from_raw(e)
+    end
 
     it "has a person" do
       event.actor.class.should == Frisky::Model::Person

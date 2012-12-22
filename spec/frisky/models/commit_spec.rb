@@ -17,11 +17,14 @@ describe Frisky::Model::Commit do
   let (:minimal_raw) do
       t = double
       t.should_receive(:respond_to?).with(:id).at_most(3).times.and_return(true)
+      t.should_receive(:respond_to?).with(:message).at_most(0).times.and_return(true)
       t.should_receive(:respond_to?).at_most(10).times.and_return(false)
+      t.should_receive(:message).at_most(2).times.and_return("got a message")
       t.should_receive(:repository).at_most(3).times.and_return(repository)
       t.should_receive(:author).at_least(0).times.and_return(Hashie::Mash.new(login: 'heelhook'))
+      t.should_receive(:no_proxy_author).at_least(0).times.and_return(Hashie::Mash.new(login: 'heelhook'))
       t.should_receive(:commit).at_least(0).times.and_return(nil)
-      t.should_receive(:committer).and_return(nil)
+      t.should_receive(:no_proxy_committer).and_return(nil)
       t.should_receive(:id).at_most(3).and_return('ad505b383910a933ac911b3b42500f4f7a2c5711')
       t
     end
@@ -39,8 +42,7 @@ describe Frisky::Model::Commit do
   end
 
   describe ".load_from_raw" do
-    let (:extended_raw) { minimal_raw }
-    let (:commit) { klass.load_from_raw(extended_raw) }
+    let (:commit) { klass.load_from_raw(minimal_raw) }
 
     it "has a repository" do
       commit.repository.class.should == Frisky::Model::Repository
@@ -56,7 +58,7 @@ describe Frisky::Model::Commit do
       end
 
       it "has stats" do
-        commit.stats.total.should_not be_nil
+        commit.stats[:total].should_not be_nil
       end
 
       it "has parents" do
@@ -69,20 +71,6 @@ describe Frisky::Model::Commit do
     end
 
     context "with raw including the message" do
-      let (:extended_raw) do
-        t = double
-        t.should_receive(:respond_to?).with(:id).at_most(3).times.and_return(true)
-        t.should_receive(:respond_to?).with(:message).and_return(true)
-        t.should_receive(:respond_to?).at_most(10).times.and_return(false)
-        t.should_receive(:author).at_least(0).times.and_return(Hashie::Mash.new(login: 'heelhook'))
-        t.should_receive(:commit).at_least(0).times.and_return(nil)
-        t.should_receive(:committer).and_return(nil)
-        t.should_receive(:message).at_most(2).times.and_return("got a message")
-        t.should_receive(:repository).at_most(3).times.and_return(repository)
-        t.should_receive(:id).at_most(3).and_return('ad505b383910a933ac911b3b42500f4f7a2c5711')
-        t
-      end
-
       it "loads a message" do
         commit.no_proxy_message.should_not be_nil
       end
@@ -95,8 +83,7 @@ describe Frisky::Model::Commit do
         r.should_receive(:full_name).exactly(0).times
         r
       end
-      let (:extended_raw) { minimal_raw }
-      let (:commit) { klass.load_from_raw(extended_raw) }
+      let (:commit) { klass.load_from_raw(minimal_raw) }
 
       it "has a repo without using soft_fetch" do
         commit.repository.should_not be_nil
