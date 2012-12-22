@@ -13,9 +13,12 @@ module Frisky
 
       # Github
       if config['github'] and config['github']['keys']
-        client_id, client_secret = config['github']['keys'].sample.split(/:/)
-        Octokit.client_id        = client_id
-        Octokit.client_secret    = client_secret
+        Frisky.config['github']['keys'].map! { |data| data.split(/:/) }
+
+        def Octokit.client_id
+          Octokit.client_id, Octokit.client_secret = Frisky.config['github']['keys'].sample
+          super
+        end
       end
 
       if defined? CONFIG_EXTENSIONS
