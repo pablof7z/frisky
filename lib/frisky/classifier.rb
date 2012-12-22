@@ -1,10 +1,8 @@
+require 'frisky/classifier/hooks'
+require 'frisky/classifier/queue'
+require 'frisky/classifier/keys'
+
 module Frisky
-  class << self
-    attr_accessor :classifiers
-  end
-
-  @classifiers ||= {}
-
   # Module that provides core functionality for classifiers.
   #
   # Classifiers are Ruby classes that respond to mining asynchronous events.
@@ -15,20 +13,10 @@ module Frisky
   module Classifier
     extend ActiveSupport::Concern
 
-    autoload :Hooks, 'frisky/classifier/hooks'
-    autoload :Queue, 'frisky/classifier/queue'
-    autoload :Keys,  'frisky/classifier/keys'
-
-    include Hooks
-    include Queue
-    include Keys
-
-    def id; self.class.name; end
-
     included do
-      extend Hooks
-      extend Queue
-      extend Keys
+      include Hooks
+      include Queue
+      include Keys
     end
   end
 end

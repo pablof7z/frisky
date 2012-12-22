@@ -8,7 +8,7 @@ module Frisky
       fetch_autoload :name, :email, :bio, :location, :blog, :company,
                     :login, :followers, :gravatar_id, :avatar_url, :html_url
 
-      fallback_fetch { |args| Frisky.log.debug "[FALLBACK PERSON] #{args[:login]}"; Octokit.user(args[:login]) }
+      fallback_fetch { |args| args[:login] ? Octokit.user(args[:login]) : args }
 
       proxy_methods :name, :email, :bio, :location, :blog, :company,
                     :followers, :gravatar_id, :avatar_url, :html_url

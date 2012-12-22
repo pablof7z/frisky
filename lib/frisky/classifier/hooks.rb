@@ -4,12 +4,6 @@ module Frisky
       extend ActiveSupport::Concern
 
       module ClassMethods
-        def inherited(descendant)
-          descendant.instance_variable_set(:@hooks, hooks.dup)
-          descendant.instance_variable_set(:@events, events.dup)
-          super
-        end
-
         def hooks
           @hooks ||= Hash.new { |hash, key| hash[key] = [] }
         end

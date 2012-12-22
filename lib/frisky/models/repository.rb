@@ -8,7 +8,7 @@ module Frisky
       fetch_autoload :homepage, :watchers_count, :html_url, :owner, :master_branch,
                      :forks_count, :git_url, :full_name, :name, :created_at, :url
 
-      fallback_fetch { |args| Frisky.log.debug "[FALLBACK REPOSITORY] #{args[:full_name]}"; Octokit.repo(args[:full_name]) }
+      fallback_fetch { |args| Octokit.repo(args[:full_name]) }
       after_fallback_fetch do |obj|
         self.owner = Person.soft_fetch(obj.owner)
       end

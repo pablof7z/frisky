@@ -42,7 +42,7 @@ module Frisky
         klass      = Kernel.const_get(class_name.to_sym)
 
         # Load it
-        self.classifiers[klass.name] = klass
+        @classifiers[klass.name] = klass
       rescue NoMethodError
         raise
       rescue NameError
