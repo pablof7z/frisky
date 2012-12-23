@@ -25,6 +25,10 @@ module Frisky
 
         super(raw)
       end
+
+      def html_url
+        super || "https://github.com/#{full_name}"
+      end
     end
   end
 end

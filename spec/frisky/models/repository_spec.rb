@@ -49,4 +49,17 @@ describe Frisky::Model::Repository do
       model.full_name.should_not be_nil
     end
   end
+
+  describe '#html_url' do
+    let (:object) { klass.new(full_name: full_name) }
+
+    it "guesses the html url" do
+      object.html_url.should == "https://github.com/#{full_name}"
+    end
+
+    it "doesn't guess the html url when its present" do
+      object.html_url = 'some url'
+      object.html_url.should == 'some url'
+    end
+  end
 end
