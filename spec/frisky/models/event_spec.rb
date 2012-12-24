@@ -42,5 +42,9 @@ describe Frisky::Model::Event do
     it "has only valid commit objects" do
       event.commits.select {|a| a.is_a? Frisky::Model::Commit }.size.should == event.commits.size
     end
+
+    it "has a valid creation date" do
+      event.created_at.class.should == DateTime
+    end
   end
 end
