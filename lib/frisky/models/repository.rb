@@ -2,15 +2,18 @@ module Frisky
   module Model
     class Repository < ProxyBase
       attr_accessor :homepage, :watchers_count, :html_url, :owner, :master_branch,
-                    :forks_count, :git_url, :full_name, :name, :created_at, :url
+                    :forks_count, :git_url, :full_name, :name, :created_at, :url,
+                    :forked, :description
 
       fetch_key :full_name
       fetch_autoload :homepage, :watchers_count, :html_url, :owner, :master_branch,
-                     :forks_count, :git_url, :full_name, :name, :created_at, :url
+                     :forks_count, :git_url, :full_name, :name, :created_at, :url,
+                     :description
 
       fallback_fetch { |args| Octokit.repo(args[:full_name]) }
       after_fallback_fetch do |obj|
         self.owner = Person.soft_fetch(obj.owner)
+        self.forked = obj['fork']
       end
 
       proxy_methods :name, :url, :owner
