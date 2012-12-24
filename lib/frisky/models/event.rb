@@ -4,11 +4,11 @@ module Frisky
   module Model
     class Event
       attr_accessor :type, :public, :payload, :repository, :actor, :commits, :ref,
-                    :head
+                    :head, :created_at
 
       def self.load_from_hashie(hashie)
         event = Event.new
-        %w(type public ref head).each do |key|
+        %w(type public ref head created_at).each do |key|
           event.send("#{key}=", hashie.send(key)) if hashie.keys.include? key
         end
         event.actor = Person.soft_fetch(hashie.actor)
@@ -30,6 +30,7 @@ module Frisky
         event.public     = raw.public
         event.actor      = Person.soft_fetch(raw.actor)
         event.repository = Repository.soft_fetch(raw.repo) if raw.repo and raw.repo.name
+        event.created_at = DateTime.parse(raw.created_at)
 
         # Load payload
         method = "process_#{raw.type.underscore}".to_sym
