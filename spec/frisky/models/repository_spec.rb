@@ -62,4 +62,17 @@ describe Frisky::Model::Repository do
       object.html_url.should == 'some url'
     end
   end
+
+  describe '#contributors' do
+    let (:object) { klass.new(full_name: full_name) }
+
+    it "has contributors" do
+      object.contributors.size.should >= 2
+    end
+
+    it "has contributors that are people" do
+      logins = object.contributors.keys.map { |c| Frisky::Model::Person.soft_fetch(id: c).login }
+      logins.include?('heelhook').should be_true
+    end
+  end
 end
