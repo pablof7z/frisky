@@ -46,7 +46,7 @@ module Frisky
 
         # Key that is going to be used to
         def fetch_key(*keys)
-          @fetch_keys = {}
+          @fetch_keys ||= {}
 
           keys.each do |key|
             if key.is_a? Hash

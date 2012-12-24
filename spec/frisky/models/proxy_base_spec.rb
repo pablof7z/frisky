@@ -26,6 +26,13 @@ describe Frisky::Model::ProxyBase do
       base.instance_variable_get(:@fetch_keys).keys.should == [:symbol1, :symbol2]
     end
 
+    it "allows adding keys with further calls" do
+      base.fetch_key :symbol1
+      base.fetch_key :symbol2
+
+      base.instance_variable_get(:@fetch_keys).keys.should == [:symbol1, :symbol2]
+    end
+
     it "sets a lambda correctly" do
       base.fetch_key symbol1: lambda { "test" }
       base.instance_variable_get(:@fetch_keys).keys.should == [:symbol1]
