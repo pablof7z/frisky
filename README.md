@@ -1,5 +1,5 @@
 # frisky [![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/heelhook/frisky)
-A playful scm mirror platform for MSR (mining software repositories)
+A playful scm platform for MSR (mining software repositories)
 
 http://heelhook.github.com/frisky
 
@@ -7,8 +7,12 @@ http://heelhook.github.com/frisky
 
 ## What this is
 
-Frisky is an engine to cache and process SCM repositories, supporting initially Git and particularly Github
+Frisky is an engine to cache and process SCM repositories in bulk, supporting initially Git and particularly Github
 as a discovery source.
+
+## Goal
+
+The main goal of Frisky, as a platform, is to provide an environment where any developer can validate and test algorithms to extract knowledge out of Git data.
 
 ## How it works
 
@@ -127,3 +131,16 @@ bundle exec bin/frisky-classifiers -v
 ```
 
 Loads classifiers models and processes events through them. Can be run in parallel in multiple hosts.
+
+
+
+## License
+
+### The MIT License (MIT)
+Copyright (c) 2013 Pablo Fernandez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
