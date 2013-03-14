@@ -35,7 +35,7 @@ describe Frisky::Classifier do
 
   describe "::Queue" do
     let (:valid_event) do
-      Frisky::Model::Event.load_from_raw(Octokit.public_events.select {|e| e.type == event_type}.first).serialize
+      Octokit.public_events.select {|e| e.type == event_type}.first.to_json
     end
 
     describe ".announce" do

@@ -17,7 +17,7 @@ module Frisky
         end
 
         def perform(payload)
-          event = Frisky::Model::Event.load_from_hashie(Hashie::Mash.new(JSON.parse(payload)))
+          event = Frisky::Model::Event.load_from_raw(Hashie::Mash.new(JSON.parse(payload)))
 
           # Attempt to multiplex this event
           method = "process_#{event.type.underscore}"
@@ -34,8 +34,6 @@ module Frisky
           self.hooks[:push].each do |args|
             method = args.shift
 
-            # Frisky.log.debug "Will call #{method} (#{self.name}), have #{event.repository}"
-
             self.send(method, event.repository, event)
           end
         end
@@ -43,8 +41,6 @@ module Frisky
         def process_follow_event(event)
           self.hooks[:follow].each do |args|
             method = args.shift
-
-            Frisky.log.debug "Will call #{method} (#{self.name})"
 
             # self.send(method, repo, push)
           end

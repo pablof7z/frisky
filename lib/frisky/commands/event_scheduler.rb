@@ -20,15 +20,14 @@ module Frisky
         # Get 10 pages of of events
         pages_to_fetch.times do |page_number|
           Octokit.get(@options[:url], per_page: 30, page: page_number+1).each do |event_raw|
-            next if Frisky::Model::Event.exists?(event_raw)
-            e = Frisky::Model::Event.load_from_raw(event_raw)
+            event_type = event_raw.type
 
             @classifiers.each do |name, event_types|
               begin
                 # Does this classifier support this event?
-                next unless event_types.include? e.type
+                next unless event_types.include? event_type
 
-                Resque.push(name, 'class' => name, args: e.serialize.to_s)
+                Resque.push(name, 'class' => name, args: event_raw.to_json)
                 pushed_jobs += 1
               rescue StandardError => e
                 Frisky.log.warn "[#{e.class}] #{e.message}"

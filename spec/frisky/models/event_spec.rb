@@ -19,6 +19,11 @@ describe Frisky::Model::Event do
     it "has a person" do
       event.actor.class.should == Frisky::Model::Person
     end
+
+    it "doesn't create it in the database" do
+      event
+      Frisky::Model::Event.count.should == 0
+    end
   end
 
   context "on a push event" do

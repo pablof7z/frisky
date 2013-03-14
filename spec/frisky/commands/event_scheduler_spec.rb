@@ -34,8 +34,8 @@ describe Frisky::Commands::EventScheduler do
       command.perform(1)
     end
 
-    it "creates events" do
-      Frisky::Model::Event.count.should >= 10
+    it "doesn't create events" do
+      Frisky::Model::Event.count.should == 0
     end
 
     it "does queue some jobs" do
