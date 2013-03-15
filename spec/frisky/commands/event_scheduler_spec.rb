@@ -8,7 +8,6 @@ describe Frisky::Commands::EventScheduler do
   end
 
   let (:command) { Frisky::Commands::EventScheduler.new(url: "events", mute: true) }
-  let (:classifier) { ValidClassifier }
 
   describe '#fetch_loaded_classifiers' do
     it "drops expired classifiers" do
@@ -27,9 +26,9 @@ describe Frisky::Commands::EventScheduler do
   end
 
   describe '#perform' do
-    before :all do
+    before :each do
       reset_databases
-      classifier.announce
+      ValidClassifier.announce
       command.fetch_loaded_classifiers
       command.perform(1)
     end
@@ -39,7 +38,7 @@ describe Frisky::Commands::EventScheduler do
     end
 
     it "does queue some jobs" do
-      Frisky.redis.llen("resque:queue:#{classifier.name}").should > 0
+      Frisky.redis.llen("resque:queue:ValidClassifier").should > 0
     end
   end
 end
