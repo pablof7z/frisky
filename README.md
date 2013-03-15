@@ -1,5 +1,5 @@
 # frisky [![Build Status](https://secure.travis-ci.org/heelhook/frisky.png?branch=development)](https://travis-ci.org/heelhook/frisky) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/heelhook/frisky)
-A playful scm mirror platform for MSR (mining software repositories)
+A playful scm platform for MSR (mining software repositories)
 
 http://heelhook.github.com/frisky
 
@@ -7,8 +7,12 @@ http://heelhook.github.com/frisky
 
 ## What this is
 
-Frisky is an engine to cache and process SCM repositories, supporting initially Git and particularly Github
+Frisky is an engine to cache and process SCM repositories in bulk, supporting initially Git and particularly Github
 as a discovery source.
+
+## Goal
+
+The main goal of Frisky, as a platform, is to provide an environment where any developer can validate and test algorithms to extract knowledge out of Git data.
 
 ## How it works
 
