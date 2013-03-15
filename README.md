@@ -128,6 +128,21 @@ bundle exec bin/frisky-classifiers -v
 
 Loads classifiers models and processes events through them. Can be run in parallel in multiple hosts.
 
+## Code structure
+
+This is a brief code description to help organize
+
+`bin` -- Skeleton wrappers that run commands in `lib/frisky/commands`  
+`classifiers` -- Directory where classifiers are stored and loaded by default  
+`lib/frisky/classifier` -- Modules that support specific features of the classifiers  
+`lib/frisky/models` -- Data models with lazy loading through [ClassProxy][0]  
+`lib/frisky/models/proxy_base` -- Primitives for the data models
+
+### Data models
+
+Data models provide a lazy loading abstraction to the Github API, so that when
+a request is made of a model for some data that hasn't been loaded, it will fallback to the Github API,
+on a per-required basis, this is to optimize the number of calls made to the endpoint.
 
 ## License
 
@@ -140,3 +155,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[0]: https://github.com/heelhook/class-proxy
