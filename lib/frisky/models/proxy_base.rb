@@ -6,6 +6,22 @@ module Frisky
     class ProxyBase
       include ClassProxy
 
+      def new?
+        undefined_method :new?
+      end
+
+      def save
+        undefined_method :save
+      end
+
+      private
+
+      def undefined_method(method)
+        # Should be implemented by a database plugin
+        Frisky.log.warn("Unimplemented method #{method} on #{self.class}")
+        true
+      end
+
       class << self
         # Attempts to fetch an object, skipping the fallback,
         # if it comes back empty, an object is created using the
@@ -25,6 +41,8 @@ module Frisky
               rescue NameError => e
                 raise IncompatibleDataStructure, e.message
               end
+            else
+              Frisky.log.warn("Not sure how to handle assigning a #{key.class}")
             end
           end
 
