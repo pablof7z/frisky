@@ -12,7 +12,7 @@ module Frisky
           event.send("#{key}=", hashie.send(key)) if hashie.keys.include? key
         end
         event.actor = Person.soft_fetch(hashie.actor)
-        event.repository = Repository.soft_fetch(hashie.repository)
+        event.repository = Repository.soft_fetch(hashie.repo)
 
         event.commits = []
         if hashie.keys.include? "commits"

@@ -12,7 +12,7 @@ describe Frisky::Model::FileCommit do
   let (:klass) { Frisky::Model::FileCommit }
 
   let (:repository_full_name) { "heelhook/frisky" }
-  let (:repository) { Frisky::Model::Repository.new(full_name: repository_full_name) }
+  let (:repository) { Frisky::Model::Repository.soft_fetch(full_name: repository_full_name) }
 
   let (:commit_sha) { '9621e8f6f31d733f68834a814d2ce2a74c19edc8' }
   let (:commit) { Frisky::Model::Commit.soft_fetch(repository: repository, sha: commit_sha) }
