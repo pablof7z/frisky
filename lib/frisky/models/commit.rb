@@ -10,6 +10,8 @@ module Frisky
       fallback_fetch do |args|
         repo_full_name = args[:repository].full_name if args[:repository].is_a? Repository
         repo_full_name ||= args[:repository]
+        raise "missing repository or repository name" unless repo_full_name
+        raise "missing commit sha" unless args[:sha]
         Octokit.commit(repo_full_name, args[:sha])
       end
 

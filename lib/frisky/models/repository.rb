@@ -10,7 +10,11 @@ module Frisky
                      :forks_count, :git_url, :full_name, :name, :created_at, :url,
                      :description
 
-      fallback_fetch { |args| Octokit.repo(args[:full_name]) }
+      fallback_fetch do |args|
+        raise "missing repository name" unless args[:full_name]
+        Octokit.repo(args[:full_name])
+      end
+
       after_fallback_fetch do |obj|
         self.owner = Person.soft_fetch(obj.owner)
         self.forked = obj['fork']
