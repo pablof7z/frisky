@@ -28,3 +28,6 @@ describe Frisky do
     end
   end
 end
+
+# Put the right credentials back in place
+Frisky.config_file "#{File.dirname(__FILE__)}/../../frisky.yml"
